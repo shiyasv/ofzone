@@ -2,13 +2,21 @@
 import { useState, useEffect } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
-import { AuthProvider, useAuth } from "@/context/AuthContext";
+import { useAuth } from "@/context/AuthContext";
 import { getOffers, deleteOffer, Offer } from "@/utils/offerData";
 import AuthModal from "@/components/AuthModal";
 import OfferCard from "@/components/OfferCard";
 import CreateOfferForm from "@/components/CreateOfferForm";
+import { Input } from "@/components/ui/input";
+import { Search, Mail } from "lucide-react";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
+import HeroSection from "@/components/HeroSection";
+import FeaturedDeal from "@/components/FeaturedDeal";
+import CategorySection from "@/components/CategorySection";
+import NewsletterSection from "@/components/NewsletterSection";
 
-const OffersAndDiscounts = () => {
+const DealSpot = () => {
   const { isAuthenticated, logout } = useAuth();
   const [offers, setOffers] = useState<Offer[]>([]);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
@@ -39,48 +47,66 @@ const OffersAndDiscounts = () => {
   };
 
   return (
-    <div className="container py-8">
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold">Offers & Discounts</h1>
-        <div>
-          {isAuthenticated ? (
-            <Button variant="outline" onClick={logout}>
-              Logout
-            </Button>
-          ) : (
-            <Button onClick={() => setIsLoginModalOpen(true)}>
-              Admin Login
-            </Button>
-          )}
-        </div>
-      </div>
-
+    <div className="min-h-screen flex flex-col">
+      <Navbar
+        isAuthenticated={isAuthenticated}
+        onLoginClick={() => setIsLoginModalOpen(true)}
+        onLogoutClick={logout}
+      />
+      
+      <HeroSection />
+      
       {isAuthenticated && (
-        <div className="mb-8">
-          <CreateOfferForm onOfferAdded={handleOfferAdded} />
+        <div className="container my-8">
+          <div className="mb-4">
+            <h2 className="text-2xl font-bold mb-4">Admin Controls</h2>
+            <CreateOfferForm onOfferAdded={handleOfferAdded} />
+          </div>
         </div>
       )}
       
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {offers.length > 0 ? (
-          offers.map((offer) => (
-            <OfferCard
-              key={offer.id}
-              offer={offer}
-              onDelete={handleDeleteOffer}
-            />
-          ))
-        ) : (
-          <div className="col-span-full text-center py-10">
-            <h3 className="text-xl font-medium text-muted-foreground">
-              No offers available
-            </h3>
-            {isAuthenticated && (
-              <p className="mt-2">Create your first offer to get started!</p>
+      <main className="flex-grow">
+        <FeaturedDeal />
+        
+        <div className="container py-8">
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-3xl font-bold">Trending Deals</h2>
+            <div className="flex gap-2">
+              <Button variant="default" className="bg-blue-600 hover:bg-blue-700">All Deals</Button>
+              <Button variant="outline">Newest</Button>
+              <Button variant="outline">Ending Soon</Button>
+              <Button variant="outline">Most Popular</Button>
+            </div>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+            {offers.length > 0 ? (
+              offers.map((offer) => (
+                <OfferCard
+                  key={offer.id}
+                  offer={offer}
+                  onDelete={isAuthenticated ? handleDeleteOffer : undefined}
+                />
+              ))
+            ) : (
+              <div className="col-span-full text-center py-10">
+                <h3 className="text-xl font-medium text-muted-foreground">
+                  No offers available
+                </h3>
+                {isAuthenticated && (
+                  <p className="mt-2">Create your first offer to get started!</p>
+                )}
+              </div>
             )}
           </div>
-        )}
-      </div>
+          
+          <CategorySection />
+        </div>
+      </main>
+      
+      <NewsletterSection />
+      
+      <Footer />
 
       <AuthModal 
         isOpen={isLoginModalOpen} 
@@ -91,11 +117,7 @@ const OffersAndDiscounts = () => {
 };
 
 const Index = () => {
-  return (
-    <AuthProvider>
-      <OffersAndDiscounts />
-    </AuthProvider>
-  );
+  return <DealSpot />;
 };
 
 export default Index;

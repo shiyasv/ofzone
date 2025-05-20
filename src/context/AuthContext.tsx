@@ -1,6 +1,6 @@
 
 import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 
 interface AuthContextType {
   isAuthenticated: boolean;
@@ -24,19 +24,19 @@ export const AuthProvider: React.FC<{children: ReactNode}> = ({ children }) => {
 
   const login = async (password: string): Promise<boolean> => {
     // In a real app, this would be a secure API call
-    // For this demo, we'll use a hardcoded password
     if (password === 'admin123') {
       setIsAuthenticated(true);
       localStorage.setItem('admin_authenticated', 'true');
       toast({
-        title: "Success",
-        description: "You are now logged in as admin",
+        title: "Admin Access Granted",
+        description: "You can now manage offers and discounts",
+        variant: "default",
       });
       return true;
     } else {
       toast({
-        title: "Authentication failed",
-        description: "Incorrect password",
+        title: "Authentication Failed",
+        description: "The password you entered is incorrect",
         variant: "destructive",
       });
       return false;
@@ -47,8 +47,8 @@ export const AuthProvider: React.FC<{children: ReactNode}> = ({ children }) => {
     setIsAuthenticated(false);
     localStorage.removeItem('admin_authenticated');
     toast({
-      title: "Logged out",
-      description: "You have been logged out successfully",
+      title: "Logged Out",
+      description: "You have been logged out of admin mode",
     });
   };
 
