@@ -2,7 +2,7 @@
 import { useAuth } from "@/context/AuthContext";
 import { Offer, formatDate } from "@/utils/offerData";
 import { Button } from "@/components/ui/button";
-import { Trash2 } from "lucide-react";
+import { Trash2, ExternalLink, Copy } from "lucide-react";
 import { useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
 
@@ -28,33 +28,39 @@ const OfferCard = ({ offer, onDelete }: OfferCardProps) => {
 
   return (
     <div className="bg-white rounded-lg border shadow-sm overflow-hidden flex flex-col h-full">
-      {/* Badge display on top-left */}
-      <div className="relative">
+      {/* Image with discount badge */}
+      <div className="relative h-48 overflow-hidden bg-gray-100">
+        <img 
+          src={`https://source.unsplash.com/random/600x400/?${offer.category}`} 
+          alt={offer.title}
+          className="w-full h-full object-cover"
+        />
         {offer.isLimited && (
-          <span className="absolute top-2 left-2 bg-blue-600 text-white px-2 py-1 text-xs font-bold rounded-full">
-            {offer.discountPercentage}%
-          </span>
+          <div className="absolute top-3 right-3 bg-orange-500 text-white px-3 py-1 text-sm font-bold rounded">
+            {offer.discountPercentage}% OFF
+          </div>
         )}
-        {offer.isFeatured && (
-          <span className="absolute top-2 right-2 bg-orange-500 text-white px-2 py-1 text-xs font-bold rounded-full">
-            Popular
-          </span>
-        )}
-        <div className="h-3 bg-blue-600"></div>
       </div>
       
       <div className="p-5 flex-grow">
+        {/* Store name and expiry date */}
+        <div className="flex items-center justify-between text-sm text-gray-600 mb-2">
+          <span className="font-medium">{offer.category?.toUpperCase() || 'STORE'}</span>
+          <span className="flex items-center">
+            <svg className="h-4 w-4 mr-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+              <line x1="16" y1="2" x2="16" y2="6" />
+              <line x1="8" y1="2" x2="8" y2="6" />
+              <line x1="3" y1="10" x2="21" y2="10" />
+            </svg>
+            Valid until {formatDate(offer.validUntil)}
+          </span>
+        </div>
+        
         <h3 className="text-xl font-bold mb-2">{offer.title}</h3>
         <p className="text-gray-600 mb-4">{offer.description}</p>
         
-        <div className="flex items-center text-sm text-gray-500 mb-2">
-          <span className="font-medium">{offer.category}</span>
-        </div>
-        
-        <div className="flex items-center text-sm text-gray-500 mb-4">
-          <span>Expires: {formatDate(offer.validUntil)}</span>
-        </div>
-        
+        {/* Coupon code */}
         <div className="bg-gray-50 p-3 rounded-md mb-4 flex justify-between items-center">
           <code className="font-mono font-medium">{offer.code}</code>
           <Button 
@@ -63,7 +69,7 @@ const OfferCard = ({ offer, onDelete }: OfferCardProps) => {
             onClick={handleCopyCode}
             className="text-blue-600 hover:text-blue-800"
           >
-            {copied ? "Copied!" : "Copy"}
+            {copied ? "Copied!" : <Copy className="h-4 w-4" />}
           </Button>
         </div>
         
@@ -92,9 +98,10 @@ const OfferCard = ({ offer, onDelete }: OfferCardProps) => {
       <div className="px-5 pb-5 mt-auto flex justify-between">
         <Button 
           variant="default" 
-          className="bg-blue-600 hover:bg-blue-700 text-white w-full"
+          className="bg-blue-600 hover:bg-blue-700 text-white flex-grow flex gap-2 items-center justify-center"
         >
           View Deal
+          <ExternalLink className="h-4 w-4" />
         </Button>
         
         {onDelete && (
