@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 const FeaturedDeal = () => {
   return (
     <div className="container py-8">
-      <div className="bg-slate-600/90 rounded-lg text-white overflow-hidden">
+      <div className="bg-gradient-to-r from-blue-500 to-blue-400 rounded-lg text-white overflow-hidden">
         <div className="p-8 md:p-10">
           <span className="inline-block px-3 py-1 bg-orange-500 text-white text-sm font-medium rounded-full mb-4">
             Featured Deal
@@ -19,16 +19,16 @@ const FeaturedDeal = () => {
           </p>
           
           <div className="flex flex-wrap gap-4 mb-6">
-            <div className="flex items-center bg-slate-700/50 px-3 py-2 rounded-md">
+            <div className="flex items-center bg-blue-600/30 px-3 py-2 rounded-md">
               <span className="font-medium mr-2">SoundWave</span>
             </div>
             
-            <div className="flex items-center bg-slate-700/50 px-3 py-2 rounded-md">
+            <div className="flex items-center bg-blue-600/30 px-3 py-2 rounded-md">
               <span className="font-medium">Expires: Jun 30, 2025</span>
             </div>
           </div>
           
-          <Button className="px-6 py-2 bg-white text-blue-700 hover:bg-gray-100 flex items-center gap-2">
+          <Button className="px-6 py-2 bg-white text-blue-600 hover:bg-gray-100 flex items-center gap-2">
             Grab This Deal
             <svg 
               className="h-4 w-4" 
