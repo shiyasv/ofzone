@@ -16,7 +16,7 @@ const Navbar = ({ isAuthenticated, onLoginClick, onLogoutClick }: NavbarProps) =
       <div className="container mx-auto py-4">
         <div className="flex items-center justify-between">
           <Link to="/" className="text-2xl font-bold text-blue-600">
-            DealSpot
+            Offzone
           </Link>
           
           <nav className="hidden md:flex items-center space-x-6">
@@ -24,6 +24,9 @@ const Navbar = ({ isAuthenticated, onLoginClick, onLogoutClick }: NavbarProps) =
             <Link to="/all-deals" className="font-medium hover:text-blue-600">All Deals</Link>
             <Link to="/categories" className="font-medium hover:text-blue-600">Categories</Link>
             <Link to="/popular" className="font-medium hover:text-blue-600">Popular</Link>
+            {isAuthenticated && (
+              <Link to="/admin" className="font-medium text-blue-600 hover:text-blue-700">Admin Panel</Link>
+            )}
           </nav>
           
           <div className="flex items-center gap-4">

@@ -1,14 +1,11 @@
 
 import { useState, useEffect } from "react";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/context/AuthContext";
 import { getOffers, deleteOffer, Offer } from "@/utils/offerData";
 import AuthModal from "@/components/AuthModal";
 import OfferCard from "@/components/OfferCard";
-import CreateOfferForm from "@/components/CreateOfferForm";
-import { Input } from "@/components/ui/input";
-import { Search, Mail } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import HeroSection from "@/components/HeroSection";
@@ -16,7 +13,7 @@ import FeaturedDeal from "@/components/FeaturedDeal";
 import CategorySection from "@/components/CategorySection";
 import NewsletterSection from "@/components/NewsletterSection";
 
-const DealSpot = () => {
+const Offzone = () => {
   const { isAuthenticated, logout } = useAuth();
   const [offers, setOffers] = useState<Offer[]>([]);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
@@ -42,10 +39,6 @@ const DealSpot = () => {
     }
   };
 
-  const handleOfferAdded = () => {
-    setOffers(getOffers());
-  };
-
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar
@@ -55,15 +48,6 @@ const DealSpot = () => {
       />
       
       <HeroSection />
-      
-      {isAuthenticated && (
-        <div className="container my-8">
-          <div className="mb-4">
-            <h2 className="text-2xl font-bold mb-4">Admin Controls</h2>
-            <CreateOfferForm onOfferAdded={handleOfferAdded} />
-          </div>
-        </div>
-      )}
       
       <main className="flex-grow">
         <FeaturedDeal />
@@ -94,7 +78,9 @@ const DealSpot = () => {
                   No offers available
                 </h3>
                 {isAuthenticated && (
-                  <p className="mt-2">Create your first offer to get started!</p>
+                  <p className="mt-2">
+                    Visit the <a href="/admin" className="text-blue-600 hover:underline">admin panel</a> to create your first offer!
+                  </p>
                 )}
               </div>
             )}
@@ -117,7 +103,7 @@ const DealSpot = () => {
 };
 
 const Index = () => {
-  return <DealSpot />;
+  return <Offzone />;
 };
 
 export default Index;

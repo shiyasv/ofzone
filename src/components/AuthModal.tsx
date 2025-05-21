@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { LockKeyhole } from "lucide-react";
+import { LockKeyhole, Mail } from "lucide-react";
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -20,6 +20,7 @@ interface AuthModalProps {
 }
 
 const AuthModal = ({ isOpen, onClose }: AuthModalProps) => {
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const { login } = useAuth();
@@ -29,7 +30,7 @@ const AuthModal = ({ isOpen, onClose }: AuthModalProps) => {
     setIsLoading(true);
     
     try {
-      const success = await login(password);
+      const success = await login(email, password);
       if (success) {
         onClose();
       }
@@ -47,11 +48,22 @@ const AuthModal = ({ isOpen, onClose }: AuthModalProps) => {
           </div>
           <DialogTitle className="text-center text-xl">Admin Authentication</DialogTitle>
           <DialogDescription className="text-center">
-            Please enter your admin password to access management features.
+            Please enter your admin credentials to access management features.
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleLogin}>
           <div className="grid gap-4 py-4">
+            <div className="grid gap-2">
+              <Label htmlFor="email">Email</Label>
+              <Input
+                id="email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Enter admin email"
+                autoComplete="email"
+              />
+            </div>
             <div className="grid gap-2">
               <Label htmlFor="password">Password</Label>
               <Input
@@ -63,7 +75,7 @@ const AuthModal = ({ isOpen, onClose }: AuthModalProps) => {
                 autoComplete="current-password"
               />
               <p className="text-xs text-gray-500">
-                Hint: Default password is "admin123"
+                Admin credentials required
               </p>
             </div>
           </div>
