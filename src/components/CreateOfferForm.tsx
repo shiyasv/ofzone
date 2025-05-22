@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Upload, Image } from "lucide-react";
+import { Upload, Image, Link } from "lucide-react";
 import { addOffer, fileToBase64 } from "@/utils/offerData";
 
 interface CreateOfferFormProps {
@@ -26,6 +26,7 @@ const CreateOfferForm = ({ onOfferAdded }: CreateOfferFormProps) => {
     isFeatured: false,
     isLimited: false,
     imageUrl: "",
+    dealUrl: "", // Added dealUrl field
   });
   
   const [imagePreview, setImagePreview] = useState<string | null>(null);
@@ -126,6 +127,7 @@ const CreateOfferForm = ({ onOfferAdded }: CreateOfferFormProps) => {
         isFeatured: false,
         isLimited: false,
         imageUrl: "",
+        dealUrl: "", // Reset dealUrl
       });
       setImagePreview(null);
       onOfferAdded();
@@ -184,6 +186,22 @@ const CreateOfferForm = ({ onOfferAdded }: CreateOfferFormProps) => {
               placeholder="Get amazing discounts on all summer products"
               required
             />
+          </div>
+          
+          {/* Deal URL Field - New Addition */}
+          <div className="space-y-2">
+            <Label htmlFor="dealUrl" className="flex items-center gap-2">
+              <Link className="h-4 w-4" />
+              <span>Deal URL</span>
+            </Label>
+            <Input
+              id="dealUrl"
+              name="dealUrl"
+              value={formData.dealUrl}
+              onChange={handleChange}
+              placeholder="https://example.com/deal"
+            />
+            <p className="text-xs text-muted-foreground">Add the URL where users can access this deal</p>
           </div>
           
           {/* Image Upload Section */}

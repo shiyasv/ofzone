@@ -1,3 +1,4 @@
+
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -18,7 +19,10 @@ const Navbar = ({ isAuthenticated, onLoginClick, onLogoutClick }: NavbarProps) =
             <div className="text-blue-500 w-8 h-8 flex items-center justify-center bg-blue-100 rounded">
               <ShoppingBag className="w-5 h-5" />
             </div>
-            <span className="text-2xl font-bold text-blue-600">Offzone</span>
+            <div>
+              <span className="text-2xl font-bold text-blue-600">Offzone</span>
+              <span className="text-blue-500 ml-1 font-medium">Home</span>
+            </div>
           </Link>
           
           <nav className="hidden md:flex items-center space-x-6">
