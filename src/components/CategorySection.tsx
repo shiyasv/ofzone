@@ -1,13 +1,13 @@
 
+import { getCategories, Category } from "@/utils/offerData";
+import { useEffect, useState } from "react";
+
 const CategorySection = () => {
-  const categories = [
-    { name: "Electronics", icon: "💻" },
-    { name: "Fashion", icon: "👕" },
-    { name: "Food & Dining", icon: "🍴" },
-    { name: "Travel", icon: "✈️" },
-    { name: "Beauty", icon: "✨" },
-    { name: "Home & Garden", icon: "🏠" },
-  ];
+  const [categories, setCategories] = useState<Category[]>([]);
+
+  useEffect(() => {
+    setCategories(getCategories());
+  }, []);
 
   return (
     <div className="py-12">
@@ -15,7 +15,7 @@ const CategorySection = () => {
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4">
         {categories.map((category) => (
           <div 
-            key={category.name} 
+            key={category.id} 
             className="flex flex-col items-center p-6 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors"
           >
             <div className="h-16 w-16 flex items-center justify-center bg-blue-100 rounded-full mb-3 text-2xl">

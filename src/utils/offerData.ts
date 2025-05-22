@@ -49,6 +49,23 @@ const sampleOffers: Offer[] = [
   }
 ];
 
+// Create interface for Category
+export interface Category {
+  id: string;
+  name: string;
+  icon: string;
+}
+
+// Initial sample categories
+const sampleCategories: Category[] = [
+  { id: '1', name: "Electronics", icon: "💻" },
+  { id: '2', name: "Fashion", icon: "👕" },
+  { id: '3', name: "Food & Dining", icon: "🍴" },
+  { id: '4', name: "Travel", icon: "✈️" },
+  { id: '5', name: "Beauty", icon: "✨" },
+  { id: '6', name: "Home & Garden", icon: "🏠" },
+];
+
 // Get offers from localStorage or use sample data if none exists
 export const getOffers = (): Offer[] => {
   const storedOffers = localStorage.getItem('offers');
@@ -89,6 +106,56 @@ export const deleteOffer = (id: string): boolean => {
 export const getOfferById = (id: string): Offer | undefined => {
   const offers = getOffers();
   return offers.find(offer => offer.id === id);
+};
+
+// Get categories from localStorage or use sample data if none exists
+export const getCategories = (): Category[] => {
+  const storedCategories = localStorage.getItem('categories');
+  return storedCategories ? JSON.parse(storedCategories) : sampleCategories;
+};
+
+// Save categories to localStorage
+export const saveCategories = (categories: Category[]): void => {
+  localStorage.setItem('categories', JSON.stringify(categories));
+};
+
+// Add a new category
+export const addCategory = (category: Omit<Category, 'id'>): Category => {
+  const categories = getCategories();
+  const newCategory = {
+    ...category,
+    id: Date.now().toString(),
+  };
+  
+  saveCategories([...categories, newCategory]);
+  return newCategory;
+};
+
+// Delete a category
+export const deleteCategory = (id: string): boolean => {
+  const categories = getCategories();
+  const updatedCategories = categories.filter(category => category.id !== id);
+  
+  if (updatedCategories.length !== categories.length) {
+    saveCategories(updatedCategories);
+    return true;
+  }
+  
+  return false;
+};
+
+// Update a category
+export const updateCategory = (id: string, updates: Partial<Category>): boolean => {
+  const categories = getCategories();
+  const categoryIndex = categories.findIndex(category => category.id === id);
+  
+  if (categoryIndex !== -1) {
+    categories[categoryIndex] = { ...categories[categoryIndex], ...updates };
+    saveCategories(categories);
+    return true;
+  }
+  
+  return false;
 };
 
 // Format date for display

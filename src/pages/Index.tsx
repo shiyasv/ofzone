@@ -12,15 +12,28 @@ import HeroSection from "@/components/HeroSection";
 import FeaturedDeal from "@/components/FeaturedDeal";
 import CategorySection from "@/components/CategorySection";
 import NewsletterSection from "@/components/NewsletterSection";
+import { Instagram } from "lucide-react";
 
 const Offzone = () => {
   const { isAuthenticated, logout } = useAuth();
   const [offers, setOffers] = useState<Offer[]>([]);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const { toast } = useToast();
+  const [instagramLink, setInstagramLink] = useState('');
+  const [appLink, setAppLink] = useState('');
   
   useEffect(() => {
     setOffers(getOffers());
+    setInstagramLink(localStorage.getItem('instagram_link') || '');
+    setAppLink(localStorage.getItem('app_link') || '');
+
+    // Add Google Ads script if available
+    const googleAdScript = localStorage.getItem('google_ad_script');
+    if (googleAdScript) {
+      const scriptElement = document.createElement('script');
+      scriptElement.innerHTML = googleAdScript;
+      document.head.appendChild(scriptElement);
+    }
   }, []);
 
   const handleDeleteOffer = (id: string) => {
@@ -53,6 +66,53 @@ const Offzone = () => {
         <FeaturedDeal />
         
         <div className="container py-8">
+          {/* Social Links */}
+          {(instagramLink || appLink) && (
+            <div className="flex justify-center mb-8">
+              <div className="flex items-center gap-4">
+                {instagramLink && (
+                  <a 
+                    href={instagramLink} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="text-gray-600 hover:text-pink-600 transition-colors"
+                  >
+                    <div className="flex items-center gap-2">
+                      <Instagram className="h-5 w-5" />
+                      <span className="font-medium">Follow us</span>
+                    </div>
+                  </a>
+                )}
+                
+                {appLink && (
+                  <a 
+                    href={appLink} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="text-gray-600 hover:text-blue-600 transition-colors"
+                  >
+                    <div className="flex items-center gap-2">
+                      <svg
+                        className="h-5 w-5"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <rect x="5" y="2" width="14" height="20" rx="2" ry="2" />
+                        <circle cx="12" cy="18" r="1" />
+                      </svg>
+                      <span className="font-medium">Get our app</span>
+                    </div>
+                  </a>
+                )}
+              </div>
+            </div>
+          )}
+
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-3xl font-bold">Trending Deals</h2>
             <div className="flex gap-2">
