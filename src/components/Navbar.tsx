@@ -21,7 +21,6 @@ const Navbar = ({ isAuthenticated, onLoginClick, onLogoutClick }: NavbarProps) =
             </div>
             <div>
               <span className="text-2xl font-bold text-blue-600">Offzone</span>
-              <span className="text-blue-500 ml-1 font-medium">Home</span>
             </div>
           </Link>
           

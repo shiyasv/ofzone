@@ -22,11 +22,13 @@ const Offzone = () => {
   const { toast } = useToast();
   const [instagramLink, setInstagramLink] = useState('');
   const [appLink, setAppLink] = useState('');
+  const [mainHeading, setMainHeading] = useState('Trending Deals');
   
   useEffect(() => {
     setOffers(getOffers());
     setInstagramLink(localStorage.getItem('instagram_link') || '');
     setAppLink(localStorage.getItem('app_link') || '');
+    setMainHeading(localStorage.getItem('main_heading') || 'Trending Deals');
     
     // Track visitor
     incrementVisitorCount();
@@ -118,7 +120,7 @@ const Offzone = () => {
           )}
 
           <div className="flex justify-between items-center mb-6">
-            <h2 className="text-3xl font-bold">Trending Deals</h2>
+            <h2 className="text-3xl font-bold">{mainHeading}</h2>
             <div className="flex gap-2">
               <Button variant="default" className="bg-blue-600 hover:bg-blue-700">All Deals</Button>
               <Button variant="outline">Newest</Button>

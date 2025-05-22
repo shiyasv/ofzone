@@ -19,7 +19,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import CategoryForm from "@/components/CategoryForm";
-import { Package, Gift, Link, Instagram, Edit, Trash2, Users } from "lucide-react";
+import { Package, Gift, Link, Instagram, Edit, Trash2, Users, Heading2, FlashOff, TrendingUp } from "lucide-react";
 import { getVisitorCount } from "@/utils/visitorCounter";
 
 const Admin = () => {
@@ -37,6 +37,7 @@ const Admin = () => {
   const [editName, setEditName] = useState('');
   const [editIcon, setEditIcon] = useState('');
   const [visitorCount, setVisitorCount] = useState(0);
+  const [mainHeading, setMainHeading] = useState(localStorage.getItem('main_heading') || 'Trending Deals');
 
   // Redirect if not authenticated
   useEffect(() => {
@@ -135,6 +136,18 @@ const Admin = () => {
     });
   };
 
+  const handleSaveHeadings = () => {
+    localStorage.setItem('main_heading', mainHeading);
+    toast({
+      title: "Headings Saved",
+      description: "Custom headings have been updated successfully",
+    });
+  };
+
+  const setPresetHeading = (heading: string) => {
+    setMainHeading(heading);
+  };
+
   const emojiOptions = ["💻", "👕", "🍴", "✈️", "✨", "🏠", "💼", "📱", "🎮", "🎁", "🚗", "📚", "💳", "⛽"];
 
   if (!isAuthenticated) {
@@ -167,7 +180,7 @@ const Admin = () => {
         </div>
 
         <Tabs defaultValue="offers" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-5">
+          <TabsList className="grid w-full grid-cols-6">
             <TabsTrigger value="offers" className="flex items-center gap-2">
               <Gift className="h-4 w-4" />
               <span>Offers</span>
@@ -175,6 +188,10 @@ const Admin = () => {
             <TabsTrigger value="categories" className="flex items-center gap-2">
               <Package className="h-4 w-4" />
               <span>Categories</span>
+            </TabsTrigger>
+            <TabsTrigger value="headings" className="flex items-center gap-2">
+              <Heading2 className="h-4 w-4" />
+              <span>Headings</span>
             </TabsTrigger>
             <TabsTrigger value="social" className="flex items-center gap-2">
               <Link className="h-4 w-4" />
@@ -375,6 +392,143 @@ const Admin = () => {
                     No categories available. Create your first category above.
                   </div>
                 )}
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* Headings Tab - New Addition */}
+          <TabsContent value="headings" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Customize Headings</CardTitle>
+                <CardDescription>
+                  Customize headings displayed on your website
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="main-heading">
+                      <div className="flex items-center gap-2">
+                        <Heading2 className="h-4 w-4" />
+                        <span>Main Offers Heading</span>
+                      </div>
+                    </Label>
+                    <Input
+                      id="main-heading"
+                      placeholder="e.g., Trending Deals"
+                      value={mainHeading}
+                      onChange={(e) => setMainHeading(e.target.value)}
+                    />
+                    <p className="text-sm text-muted-foreground">
+                      This heading will be displayed above the main offers section
+                    </p>
+                  </div>
+                  
+                  <div className="mt-4 space-y-2">
+                    <Label>Quick Presets</Label>
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                      <Button 
+                        variant="outline" 
+                        className="flex items-center gap-2 justify-start" 
+                        onClick={() => setPresetHeading("Trending Deals")}
+                      >
+                        <TrendingUp className="h-4 w-4" />
+                        <span>Trending Deals</span>
+                      </Button>
+                      <Button 
+                        variant="outline" 
+                        className="flex items-center gap-2 justify-start" 
+                        onClick={() => setPresetHeading("Flash Sale Friday")}
+                      >
+                        <FlashOff className="h-4 w-4" />
+                        <span>Flash Sale Friday</span>
+                      </Button>
+                      <Button 
+                        variant="outline" 
+                        className="flex items-center gap-2 justify-start" 
+                        onClick={() => setPresetHeading("Limited Time Offers")}
+                      >
+                        <svg 
+                          className="h-4 w-4"
+                          xmlns="http://www.w3.org/2000/svg" 
+                          viewBox="0 0 24 24" 
+                          fill="none" 
+                          stroke="currentColor" 
+                          strokeWidth="2" 
+                          strokeLinecap="round" 
+                          strokeLinejoin="round"
+                        >
+                          <circle cx="12" cy="12" r="10" />
+                          <polyline points="12 6 12 12 16 14" />
+                        </svg>
+                        <span>Limited Time Offers</span>
+                      </Button>
+                      <Button 
+                        variant="outline" 
+                        className="flex items-center gap-2 justify-start" 
+                        onClick={() => setPresetHeading("Today's Best Deals")}
+                      >
+                        <svg 
+                          className="h-4 w-4"
+                          xmlns="http://www.w3.org/2000/svg" 
+                          viewBox="0 0 24 24" 
+                          fill="none" 
+                          stroke="currentColor" 
+                          strokeWidth="2" 
+                          strokeLinecap="round" 
+                          strokeLinejoin="round"
+                        >
+                          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                        </svg>
+                        <span>Today's Best Deals</span>
+                      </Button>
+                      <Button 
+                        variant="outline" 
+                        className="flex items-center gap-2 justify-start" 
+                        onClick={() => setPresetHeading("Hot Deals")}
+                      >
+                        <svg 
+                          className="h-4 w-4"
+                          xmlns="http://www.w3.org/2000/svg" 
+                          viewBox="0 0 24 24" 
+                          fill="none" 
+                          stroke="currentColor" 
+                          strokeWidth="2" 
+                          strokeLinecap="round" 
+                          strokeLinejoin="round"
+                        >
+                          <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z" />
+                        </svg>
+                        <span>Hot Deals</span>
+                      </Button>
+                      <Button 
+                        variant="outline" 
+                        className="flex items-center gap-2 justify-start" 
+                        onClick={() => setPresetHeading("Clearance Sale")}
+                      >
+                        <svg 
+                          className="h-4 w-4"
+                          xmlns="http://www.w3.org/2000/svg" 
+                          viewBox="0 0 24 24" 
+                          fill="none" 
+                          stroke="currentColor" 
+                          strokeWidth="2" 
+                          strokeLinecap="round" 
+                          strokeLinejoin="round"
+                        >
+                          <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+                          <line x1="9" y1="15" x2="15" y2="9" />
+                        </svg>
+                        <span>Clearance Sale</span>
+                      </Button>
+                    </div>
+                  </div>
+                  
+                  <Button onClick={handleSaveHeadings} className="mt-4">
+                    Save Headings
+                  </Button>
+                </div>
               </CardContent>
             </Card>
           </TabsContent>
