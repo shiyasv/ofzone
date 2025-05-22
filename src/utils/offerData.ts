@@ -9,6 +9,7 @@ export interface Offer {
   isLimited: boolean;
   imageUrl?: string;
   dealUrl?: string;
+  isFeatured?: boolean;
 }
 
 // Initial sample data
