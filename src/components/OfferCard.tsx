@@ -30,11 +30,19 @@ const OfferCard = ({ offer, onDelete }: OfferCardProps) => {
     <div className="bg-white rounded-lg border shadow-sm overflow-hidden flex flex-col h-full">
       {/* Image with discount badge */}
       <div className="relative h-48 overflow-hidden bg-gray-100">
-        <img 
-          src={`https://source.unsplash.com/random/600x400/?${offer.category}`} 
-          alt={offer.title}
-          className="w-full h-full object-cover"
-        />
+        {offer.imageUrl ? (
+          <img 
+            src={offer.imageUrl} 
+            alt={offer.title}
+            className="w-full h-full object-cover"
+          />
+        ) : (
+          <img 
+            src={`https://source.unsplash.com/random/600x400/?${offer.category}`} 
+            alt={offer.title}
+            className="w-full h-full object-cover"
+          />
+        )}
         {offer.isLimited && (
           <div className="absolute top-3 right-3 bg-orange-500 text-white px-3 py-1 text-sm font-bold rounded">
             {offer.discountPercentage}% OFF

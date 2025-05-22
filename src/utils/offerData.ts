@@ -9,6 +9,7 @@ export interface Offer {
   category: string;
   isFeatured: boolean;
   isLimited: boolean;
+  imageUrl?: string; // Add optional imageUrl field
 }
 
 // Initial sample data
@@ -96,5 +97,15 @@ export const formatDate = (dateString: string): string => {
     year: 'numeric',
     month: 'long',
     day: 'numeric'
+  });
+};
+
+// Convert file to base64 for storage
+export const fileToBase64 = (file: File): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = error => reject(error);
   });
 };

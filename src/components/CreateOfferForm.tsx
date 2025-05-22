@@ -7,7 +7,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
-import { addOffer } from "@/utils/offerData";
+import { Upload, Image } from "lucide-react";
+import { addOffer, fileToBase64 } from "@/utils/offerData";
 
 interface CreateOfferFormProps {
   onOfferAdded: () => void;
@@ -24,7 +25,11 @@ const CreateOfferForm = ({ onOfferAdded }: CreateOfferFormProps) => {
     category: "",
     isFeatured: false,
     isLimited: false,
+    imageUrl: "",
   });
+  
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -41,6 +46,56 @@ const CreateOfferForm = ({ onOfferAdded }: CreateOfferFormProps) => {
     if (!isNaN(numValue)) {
       setFormData((prev) => ({ ...prev, [name]: numValue }));
     }
+  };
+  
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    
+    if (!file) return;
+    
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      toast({
+        title: "Invalid file type",
+        description: "Please upload an image file",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    // Validate file size (max 2MB)
+    if (file.size > 2 * 1024 * 1024) {
+      toast({
+        title: "File too large",
+        description: "Image should be less than 2MB",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    try {
+      setIsUploading(true);
+      const base64 = await fileToBase64(file);
+      setImagePreview(base64);
+      setFormData(prev => ({ ...prev, imageUrl: base64 }));
+      toast({
+        title: "Image uploaded",
+        description: "Image has been uploaded successfully",
+      });
+    } catch (error) {
+      toast({
+        title: "Upload failed",
+        description: "Failed to upload image",
+        variant: "destructive",
+      });
+    } finally {
+      setIsUploading(false);
+    }
+  };
+  
+  const removeImage = () => {
+    setImagePreview(null);
+    setFormData(prev => ({ ...prev, imageUrl: "" }));
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -70,7 +125,9 @@ const CreateOfferForm = ({ onOfferAdded }: CreateOfferFormProps) => {
         category: "",
         isFeatured: false,
         isLimited: false,
+        imageUrl: "",
       });
+      setImagePreview(null);
       onOfferAdded();
     } catch (error) {
       toast({
@@ -127,6 +184,61 @@ const CreateOfferForm = ({ onOfferAdded }: CreateOfferFormProps) => {
               placeholder="Get amazing discounts on all summer products"
               required
             />
+          </div>
+          
+          {/* Image Upload Section */}
+          <div className="space-y-2">
+            <Label htmlFor="imageUpload">Offer Image</Label>
+            <div className="flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded-md p-6 bg-gray-50">
+              {!imagePreview ? (
+                <div className="text-center">
+                  <Upload className="h-12 w-12 mx-auto text-gray-400" />
+                  <p className="mt-2 text-sm text-gray-500">Click to upload an image or drag and drop</p>
+                  <p className="text-xs text-gray-400">PNG, JPG up to 2MB</p>
+                  <Input 
+                    id="imageUpload"
+                    type="file"
+                    accept="image/*"
+                    className="mt-4 w-auto mx-auto"
+                    onChange={handleImageUpload}
+                    disabled={isUploading}
+                  />
+                </div>
+              ) : (
+                <div className="relative w-full">
+                  <img
+                    src={imagePreview}
+                    alt="Offer preview"
+                    className="max-h-40 mx-auto rounded-md object-contain"
+                  />
+                  <div className="flex justify-center mt-4 space-x-2">
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      type="button"
+                      onClick={() => document.getElementById('imageUpload')?.click()}
+                    >
+                      Change
+                    </Button>
+                    <Button 
+                      variant="destructive" 
+                      size="sm"
+                      type="button"
+                      onClick={removeImage}
+                    >
+                      Remove
+                    </Button>
+                    <Input 
+                      id="imageUpload"
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={handleImageUpload}
+                    />
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
 
           <div className="grid grid-cols-2 gap-4">
