@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
@@ -20,7 +19,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import CategoryForm from "@/components/CategoryForm";
-import { Package, Gift, Link, Instagram, Edit, Trash2 } from "lucide-react";
+import { Package, Gift, Link, Instagram, Edit, Trash2, Users } from "lucide-react";
+import { getVisitorCount } from "@/utils/visitorCounter";
 
 const Admin = () => {
   const { isAuthenticated, user, logout } = useAuth();
@@ -36,6 +36,7 @@ const Admin = () => {
   const [editingCategory, setEditingCategory] = useState<Category | null>(null);
   const [editName, setEditName] = useState('');
   const [editIcon, setEditIcon] = useState('');
+  const [visitorCount, setVisitorCount] = useState(0);
 
   // Redirect if not authenticated
   useEffect(() => {
@@ -44,10 +45,11 @@ const Admin = () => {
     }
   }, [isAuthenticated, navigate]);
 
-  // Load offers and categories
+  // Load offers, categories and visitor count
   useEffect(() => {
     setOffers(getOffers());
     setCategories(getCategories());
+    setVisitorCount(getVisitorCount());
   }, []);
 
   const handleDeleteOffer = (id: string) => {
@@ -133,7 +135,7 @@ const Admin = () => {
     });
   };
 
-  const emojiOptions = ["💻", "👕", "🍴", "✈️", "✨", "🏠", "💼", "📱", "🎮", "🎁", "🚗", "📚"];
+  const emojiOptions = ["💻", "👕", "🍴", "✈️", "✨", "🏠", "💼", "📱", "🎮", "🎁", "🚗", "📚", "💳", "⛽"];
 
   if (!isAuthenticated) {
     return null; // Prevent rendering if not authenticated
@@ -156,6 +158,11 @@ const Admin = () => {
           <div className="mt-2 inline-flex items-center gap-2 bg-blue-50 px-3 py-1 rounded-md">
             <span className="text-blue-600 font-medium">Logged in as:</span>
             <span>{user?.email}</span>
+          </div>
+          <div className="mt-2 inline-flex items-center gap-2 bg-green-50 px-3 py-1 rounded-md ml-2">
+            <Users className="h-4 w-4 text-green-600" />
+            <span className="text-green-600 font-medium">Visitors:</span>
+            <span className="text-green-600">{visitorCount}</span>
           </div>
         </div>
 
@@ -242,6 +249,9 @@ const Admin = () => {
                           {new Date(offer.validUntil).toLocaleDateString()}
                         </p>
                         <p className="text-sm mt-1">{offer.description}</p>
+                        <p className="text-sm mt-1 text-blue-600">
+                          Deal URL: {offer.dealUrl || "Not set"}
+                        </p>
                       </div>
                       <Button
                         variant="destructive"

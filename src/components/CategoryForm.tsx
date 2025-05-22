@@ -15,6 +15,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { addCategory } from "@/utils/offerData";
+import { CreditCard, Fuel } from "lucide-react";
 
 // Define form schema
 const categoryFormSchema = z.object({
@@ -40,7 +41,7 @@ const CategoryForm = ({ onCategoryAdded }: CategoryFormProps) => {
     },
   });
 
-  const emojiOptions = ["💻", "👕", "🍴", "✈️", "✨", "🏠", "💼", "📱", "🎮", "🎁", "🚗", "📚"];
+  const emojiOptions = ["💻", "👕", "🍴", "✈️", "✨", "🏠", "💼", "📱", "🎮", "🎁", "🚗", "📚", "💳", "⛽"];
 
   const onSubmit = async (values: CategoryFormValues) => {
     setIsSubmitting(true);
@@ -113,6 +114,22 @@ const CategoryForm = ({ onCategoryAdded }: CategoryFormProps) => {
                         {emoji}
                       </Button>
                     ))}
+                    <Button
+                      type="button"
+                      variant={field.value === "card" ? "default" : "outline"}
+                      className="w-10 h-10 p-0"
+                      onClick={() => form.setValue("icon", "card")}
+                    >
+                      <CreditCard className="h-5 w-5" />
+                    </Button>
+                    <Button
+                      type="button"
+                      variant={field.value === "fuel" ? "default" : "outline"}
+                      className="w-10 h-10 p-0"
+                      onClick={() => form.setValue("icon", "fuel")}
+                    >
+                      <Fuel className="h-5 w-5" />
+                    </Button>
                   </div>
                 </FormControl>
                 <FormMessage />

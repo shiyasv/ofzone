@@ -107,6 +107,11 @@ const OfferCard = ({ offer, onDelete }: OfferCardProps) => {
         <Button 
           variant="default" 
           className="bg-blue-600 hover:bg-blue-700 text-white flex-grow flex gap-2 items-center justify-center"
+          onClick={() => {
+            if (offer.dealUrl) {
+              window.open(offer.dealUrl, '_blank');
+            }
+          }}
         >
           View Deal
           <ExternalLink className="h-4 w-4" />

@@ -13,6 +13,7 @@ import FeaturedDeal from "@/components/FeaturedDeal";
 import CategorySection from "@/components/CategorySection";
 import NewsletterSection from "@/components/NewsletterSection";
 import { Instagram } from "lucide-react";
+import { incrementVisitorCount } from "@/utils/visitorCounter";
 
 const Offzone = () => {
   const { isAuthenticated, logout } = useAuth();
@@ -26,6 +27,9 @@ const Offzone = () => {
     setOffers(getOffers());
     setInstagramLink(localStorage.getItem('instagram_link') || '');
     setAppLink(localStorage.getItem('app_link') || '');
+    
+    // Track visitor
+    incrementVisitorCount();
 
     // Add Google Ads script if available
     const googleAdScript = localStorage.getItem('google_ad_script');

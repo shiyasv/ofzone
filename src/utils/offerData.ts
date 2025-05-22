@@ -1,15 +1,14 @@
-
 export interface Offer {
   id: string;
   title: string;
   description: string;
+  code: string;
   discountPercentage: number;
   validUntil: string;
-  code: string;
-  category: string;
-  isFeatured: boolean;
+  category?: string;
   isLimited: boolean;
-  imageUrl?: string; // Add optional imageUrl field
+  imageUrl?: string;
+  dealUrl?: string;
 }
 
 // Initial sample data
@@ -18,33 +17,30 @@ const sampleOffers: Offer[] = [
     id: '1',
     title: 'Summer Sale',
     description: 'Get amazing discounts on all summer products',
+    code: 'SUMMER20',
     discountPercentage: 20,
     validUntil: '2025-09-30',
-    code: 'SUMMER20',
     category: 'seasonal',
-    isFeatured: true,
     isLimited: false
   },
   {
     id: '2',
     title: 'New Customer Discount',
     description: 'Special discount for first-time customers',
+    code: 'WELCOME15',
     discountPercentage: 15,
     validUntil: '2025-12-31',
-    code: 'WELCOME15',
     category: 'new-customer',
-    isFeatured: false,
     isLimited: false
   },
   {
     id: '3',
     title: 'Flash Sale Friday',
     description: 'Limited time offer. Valid only this Friday!',
+    code: 'FLASH30',
     discountPercentage: 30,
     validUntil: '2025-06-07',
-    code: 'FLASH30',
     category: 'flash-sale',
-    isFeatured: false,
     isLimited: true
   }
 ];
