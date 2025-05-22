@@ -46,7 +46,13 @@ const CategoryForm = ({ onCategoryAdded }: CategoryFormProps) => {
     setIsSubmitting(true);
 
     try {
-      addCategory(values);
+      // Ensure values are not optional - name and icon are required by the addCategory function
+      const categoryData = {
+        name: values.name,
+        icon: values.icon
+      };
+      
+      addCategory(categoryData);
       
       form.reset({
         name: "",
