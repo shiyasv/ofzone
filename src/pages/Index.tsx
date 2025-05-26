@@ -28,7 +28,10 @@ const Offzone = () => {
     setOffers(getOffers());
     setInstagramLink(localStorage.getItem('instagram_link') || '');
     setAppLink(localStorage.getItem('app_link') || '');
-    setMainHeading(localStorage.getItem('main_heading') || 'Trending Deals');
+    
+    // Get the main heading from localStorage, with fallback to 'Trending Deals'
+    const savedHeading = localStorage.getItem('main_heading');
+    setMainHeading(savedHeading || 'Trending Deals');
     
     // Track visitor
     incrementVisitorCount();
