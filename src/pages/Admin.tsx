@@ -152,7 +152,9 @@ const Admin = () => {
 
   const handleAddCustomHeading = () => {
     if (newHeading.trim() && !customHeadings.includes(newHeading.trim())) {
-      setCustomHeadings([...customHeadings, newHeading.trim()]);
+      const updatedHeadings = [...customHeadings, newHeading.trim()];
+      setCustomHeadings(updatedHeadings);
+      localStorage.setItem('custom_headings', JSON.stringify(updatedHeadings));
       setNewHeading('');
       toast({
         title: "Heading Added",
@@ -162,7 +164,9 @@ const Admin = () => {
   };
 
   const handleRemoveCustomHeading = (headingToRemove: string) => {
-    setCustomHeadings(customHeadings.filter(heading => heading !== headingToRemove));
+    const updatedHeadings = customHeadings.filter(heading => heading !== headingToRemove);
+    setCustomHeadings(updatedHeadings);
+    localStorage.setItem('custom_headings', JSON.stringify(updatedHeadings));
     toast({
       title: "Heading Removed",
       description: "Custom heading has been removed successfully",
@@ -171,6 +175,20 @@ const Admin = () => {
 
   const setPresetHeading = (heading: string) => {
     setMainHeading(heading);
+    localStorage.setItem('main_heading', heading);
+    toast({
+      title: "Heading Updated",
+      description: `Main heading changed to "${heading}"`,
+    });
+  };
+
+  const setCustomHeadingAsMain = (heading: string) => {
+    setMainHeading(heading);
+    localStorage.setItem('main_heading', heading);
+    toast({
+      title: "Heading Updated",
+      description: `Main heading changed to "${heading}"`,
+    });
   };
 
   const emojiOptions = ["💻", "👕", "🍴", "✈️", "✨", "🏠", "💼", "📱", "🎮", "🎁", "🚗", "📚", "💳", "⛽"];
@@ -443,7 +461,10 @@ const Admin = () => {
                       id="main-heading"
                       placeholder="e.g., Trending Deals"
                       value={mainHeading}
-                      onChange={(e) => setMainHeading(e.target.value)}
+                      onChange={(e) => {
+                        setMainHeading(e.target.value);
+                        localStorage.setItem('main_heading', e.target.value);
+                      }}
                     />
                     <p className="text-sm text-muted-foreground">
                       This heading will be displayed above the main offers section
@@ -585,7 +606,7 @@ const Admin = () => {
                           >
                             <span 
                               className="cursor-pointer hover:text-blue-600 flex-grow"
-                              onClick={() => setMainHeading(heading)}
+                              onClick={() => setCustomHeadingAsMain(heading)}
                             >
                               {heading}
                             </span>
@@ -606,8 +627,8 @@ const Admin = () => {
                     </div>
                   )}
                   
-                  <Button onClick={handleSaveHeadings} className="mt-4">
-                    Save Headings
+                  <Button onClick={handleSaveHeadings} className="mt-4" variant="outline">
+                    Manual Save (Optional)
                   </Button>
                 </div>
               </CardContent>
