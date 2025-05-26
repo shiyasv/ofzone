@@ -19,7 +19,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import CategoryForm from "@/components/CategoryForm";
-import { Package, Gift, Link, Instagram, Edit, Trash2, Users, Heading2, Zap, TrendingUp } from "lucide-react";
+import { Package, Gift, Link, Instagram, Edit, Trash2, Users, Heading2, Zap, TrendingUp, Plus, X } from "lucide-react";
 import { getVisitorCount } from "@/utils/visitorCounter";
 
 const Admin = () => {
@@ -38,6 +38,11 @@ const Admin = () => {
   const [editIcon, setEditIcon] = useState('');
   const [visitorCount, setVisitorCount] = useState(0);
   const [mainHeading, setMainHeading] = useState(localStorage.getItem('main_heading') || 'Trending Deals');
+  const [customHeadings, setCustomHeadings] = useState<string[]>(() => {
+    const saved = localStorage.getItem('custom_headings');
+    return saved ? JSON.parse(saved) : [];
+  });
+  const [newHeading, setNewHeading] = useState('');
 
   // Redirect if not authenticated
   useEffect(() => {
@@ -138,9 +143,29 @@ const Admin = () => {
 
   const handleSaveHeadings = () => {
     localStorage.setItem('main_heading', mainHeading);
+    localStorage.setItem('custom_headings', JSON.stringify(customHeadings));
     toast({
       title: "Headings Saved",
       description: "Custom headings have been updated successfully",
+    });
+  };
+
+  const handleAddCustomHeading = () => {
+    if (newHeading.trim() && !customHeadings.includes(newHeading.trim())) {
+      setCustomHeadings([...customHeadings, newHeading.trim()]);
+      setNewHeading('');
+      toast({
+        title: "Heading Added",
+        description: "Custom heading has been added successfully",
+      });
+    }
+  };
+
+  const handleRemoveCustomHeading = (headingToRemove: string) => {
+    setCustomHeadings(customHeadings.filter(heading => heading !== headingToRemove));
+    toast({
+      title: "Heading Removed",
+      description: "Custom heading has been removed successfully",
     });
   };
 
@@ -224,7 +249,7 @@ const Admin = () => {
                 strokeLinecap="round"
                 strokeLinejoin="round"
               >
-                <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path>
+                <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l-.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path>
                 <circle cx="12" cy="12" r="3"></circle>
               </svg>
               <span>Settings</span>
@@ -406,7 +431,7 @@ const Admin = () => {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="space-y-4">
+                <div className="space-y-6">
                   <div className="space-y-2">
                     <Label htmlFor="main-heading">
                       <div className="flex items-center gap-2">
@@ -425,7 +450,7 @@ const Admin = () => {
                     </p>
                   </div>
                   
-                  <div className="mt-4 space-y-2">
+                  <div className="space-y-4">
                     <Label>Quick Presets</Label>
                     <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
                       <Button 
@@ -524,6 +549,62 @@ const Admin = () => {
                       </Button>
                     </div>
                   </div>
+
+                  <div className="space-y-4">
+                    <Label>Add Custom Heading</Label>
+                    <div className="flex gap-2">
+                      <Input
+                        placeholder="Enter custom heading..."
+                        value={newHeading}
+                        onChange={(e) => setNewHeading(e.target.value)}
+                        onKeyPress={(e) => {
+                          if (e.key === 'Enter') {
+                            handleAddCustomHeading();
+                          }
+                        }}
+                      />
+                      <Button 
+                        onClick={handleAddCustomHeading}
+                        disabled={!newHeading.trim()}
+                        className="flex items-center gap-2"
+                      >
+                        <Plus className="h-4 w-4" />
+                        <span>Add</span>
+                      </Button>
+                    </div>
+                  </div>
+
+                  {customHeadings.length > 0 && (
+                    <div className="space-y-4">
+                      <Label>Your Custom Headings</Label>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                        {customHeadings.map((heading, index) => (
+                          <div 
+                            key={index}
+                            className="flex items-center justify-between p-3 border rounded-lg bg-gray-50"
+                          >
+                            <span 
+                              className="cursor-pointer hover:text-blue-600 flex-grow"
+                              onClick={() => setMainHeading(heading)}
+                            >
+                              {heading}
+                            </span>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => handleRemoveCustomHeading(heading)}
+                              className="text-red-500 hover:text-red-600 hover:bg-red-50"
+                            >
+                              <X className="h-4 w-4" />
+                            </Button>
+                          </div>
+                        ))}
+                      </div>
+                      <p className="text-sm text-muted-foreground">
+                        Click on any custom heading to use it as your main heading
+                      </p>
+                    </div>
+                  )}
                   
                   <Button onClick={handleSaveHeadings} className="mt-4">
                     Save Headings
