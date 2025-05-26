@@ -19,7 +19,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import CategoryForm from "@/components/CategoryForm";
-import { Package, Gift, Link, Instagram, Edit, Trash2, Users, Heading2, FlashOff, TrendingUp } from "lucide-react";
+import { Package, Gift, Link, Instagram, Edit, Trash2, Users, Heading2, Zap, TrendingUp } from "lucide-react";
 import { getVisitorCount } from "@/utils/visitorCounter";
 
 const Admin = () => {
@@ -396,7 +396,7 @@ const Admin = () => {
             </Card>
           </TabsContent>
 
-          {/* Headings Tab - New Addition */}
+          {/* Headings Tab */}
           <TabsContent value="headings" className="space-y-6">
             <Card>
               <CardHeader>
@@ -441,7 +441,7 @@ const Admin = () => {
                         className="flex items-center gap-2 justify-start" 
                         onClick={() => setPresetHeading("Flash Sale Friday")}
                       >
-                        <FlashOff className="h-4 w-4" />
+                        <Zap className="h-4 w-4" />
                         <span>Flash Sale Friday</span>
                       </Button>
                       <Button 
